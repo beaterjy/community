@@ -46,7 +46,7 @@ public class AuthorizeController {
             request.getSession().setAttribute("user", userDTO);
             return "redirect:/";
         } else {
-            // 登录失败，重新登录
+            // 登录失败，重新登录。
             return "redirect:/";
         }
     }
