@@ -56,6 +56,8 @@ public class AuthorizeController {
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
+            user.setAvatarUrl(githubUserDTO.getAvatar_url());
+            user.setBio(githubUserDTO.getBio());
             // 登录成功，保存到数据库
             userMapper.insert(user);
             // 登录成功，保存 cookie

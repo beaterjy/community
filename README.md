@@ -11,9 +11,17 @@
 
 [flyway migration](https://flywaydb.org/documentation/getstarted/firststeps/maven#creating-the-project)
 
+[lombok](https://projectlombok.org/features/all)
+
 ## 工具
 [Visual Paradigm](https://www.visual-paradigm.com)
 
+## 关键配置
+
+mybatis 驼峰识别配置
+```
+mybatis.configuration.map-underscore-to-camel-case=true
+```
 
 ## 源码来源
 

@@ -14,3 +14,12 @@ body {
 .warning {
     margin-right:15px;
 }
+
+.text-extra {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+
+.w40 { width:40px;}
+.h40 { height:40px;}
