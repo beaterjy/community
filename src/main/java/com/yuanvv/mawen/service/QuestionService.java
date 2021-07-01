@@ -1,5 +1,6 @@
 package com.yuanvv.mawen.service;
 
+import com.yuanvv.mawen.dto.PaginationDTO;
 import com.yuanvv.mawen.dto.QuestionDTO;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
@@ -20,9 +21,10 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<QuestionDTO> getList() {
+    public PaginationDTO getPage(Integer page, Integer pageSize) {
+
         List<QuestionDTO> questionDTOs = new ArrayList<>();
-        List<Question> questions = questionMapper.latestList();
+        List<Question> questions = questionMapper.latestList(page-1, pageSize);
         for (Question question : questions) {
             QuestionDTO q = new QuestionDTO();
             BeanUtils.copyProperties(question, q);
@@ -30,6 +32,12 @@ public class QuestionService {
 
             questionDTOs.add(q);
         }
-        return questionDTOs;
+
+        // 封装成 PaginationDTO
+        Integer totalCount = questionMapper.count();
+        PaginationDTO paginationDTO = new PaginationDTO();
+        paginationDTO.setQuestions(questionDTOs);
+        paginationDTO.setPagination(page, pageSize, totalCount);
+        return paginationDTO;
     }
 }

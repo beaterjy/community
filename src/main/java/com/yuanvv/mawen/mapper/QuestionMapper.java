@@ -3,6 +3,7 @@ package com.yuanvv.mawen.mapper;
 import com.yuanvv.mawen.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public interface QuestionMapper {
             "VALUES (#{title}, #{description}, #{tag}, #{creator}, #{gmtCreate}, #{gmtModified});")
     void create(Question question);
 
-    @Select("SELECT * FROM question ORDER BY gmt_create DESC;")
-    List<Question> latestList();
+    @Select("SELECT * FROM question ORDER BY gmt_create DESC LIMIT #{limit} OFFSET #{offset};")
+    List<Question> latestList(@Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    @Select("SELECT count(1) FROM question;")
+    Integer count();
 }

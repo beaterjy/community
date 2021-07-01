@@ -56,7 +56,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
             <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 发现</h3>
-            <div class="media" th:each="question : ${questions}">
+            <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object w40 h40" src="" th:src="${question.user.avatarUrl}">
@@ -75,6 +75,34 @@
     </div>
 </div>
 <!-- 主体 END -->
+
+<!-- 分页 START -->
+<nav aria-label="Page navigation" class="text-center">
+    <ul class="pagination" >
+        <li th:if="${pagination.showStart}">
+            <a href="/" aria-label="Previous" th:href="@{/(page=${pagination.start})}">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li th:if="${pagination.showPre}">
+            <a href="/" aria-label="Previous" th:href="@{/(page=${pagination.currPage - 1})}">
+                <span aria-hidden="true">&lsaquo;</span>
+            </a>
+        <li th:each="page : ${pagination.pages}" th:classappend="${page == pagination.currPage}?'active'">
+            <a href="/" th:href="@{/(page=${page})}" th:text="${page}">1</a>
+        </li>
+        <li th:if="${pagination.showNext}">
+            <a href="/" aria-label="Next" th:href="@{/(page=${pagination.currPage + 1})}">
+                <span aria-hidden="true">&rsaquo;</span>
+            </a>
+        <li th:if="${pagination.showEnd}">
+            <a href="/" aria-label="Next" th:href="@{/(page=${pagination.end})}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<!-- 分页 END -->
 
 </body>
 </html>
