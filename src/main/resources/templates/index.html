@@ -29,9 +29,9 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}">我的标题</h4>
-                    <p class="text-extra"> <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate,'yyyy MMMM dd')}"></span></p>
+                    <h4 class="media-heading"><a href="" th:text="${question.title}">我的标题</a></h4>
                     <p th:text="${question.description}"></p>
+                    <p class="text-extra"> <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></span></p>
                 </div>
             </div>
         </div>
