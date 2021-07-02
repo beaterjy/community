@@ -39,19 +39,7 @@ public class PublishController {
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
 
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    user = userMapper.findByToken(cookie.getValue());
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                        break;
-                    }
-                }
-            }
-        }
+        User user = (User)request.getSession().getAttribute("user");
         if (user != null) {
             if (title == null || title.equals("")) {
                 model.addAttribute("error", "缺少标题");

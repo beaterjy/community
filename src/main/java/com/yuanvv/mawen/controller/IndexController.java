@@ -43,18 +43,6 @@ public class IndexController {
         page = page >= 1 ? page : 1;
         page = page <= totalpage ? page : totalpage;
 
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    User user = userMapper.findByToken(cookie.getValue());
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                }
-            }
-        }
         model.addAttribute("pagination", questionService.getPage(page, pageSize));
 
         return "index";
