@@ -15,9 +15,15 @@ public interface QuestionMapper {
             "VALUES (#{title}, #{description}, #{tag}, #{creator}, #{gmtCreate}, #{gmtModified});")
     void create(Question question);
 
-    @Select("SELECT * FROM question ORDER BY gmt_create DESC LIMIT #{limit} OFFSET #{offset};")
+    @Select("SELECT * FROM question LIMIT #{limit} OFFSET #{offset};")
     List<Question> latestList(@Param("offset") Integer offset, @Param("limit") Integer limit);
 
-    @Select("SELECT count(1) FROM question;")
+    @Select("SELECT COUNT(1) FROM question;")
     Integer count();
+
+    @Select("SELECT * FROM question WHERE creator = #{id} LIMIT #{limit} OFFSET #{offset};")
+    List<Question> getListById(@Param("id") Integer id, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    @Select("SELECT COUNT(1) FROM question WHERE creator = #{id};")
+    Integer countById(@Param("id") Integer id);
 }
