@@ -1,10 +1,7 @@
 package com.yuanvv.mawen.mapper;
 
 import com.yuanvv.mawen.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -18,4 +15,10 @@ public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE id = #{id} LIMIT 1;")
     User findById(@Param("id") Integer id);
+
+    @Select("SELECT * FROM user WHERE account_id = #{accountId} LIMIT 1;")
+    User findByAccountId(@Param("accountId") String accountId);
+
+    @Select("UPDATE user SET name=#{name}, gmt_modified=#{gmtModified}, bio=#{bio}, avatar_url=#{avatarUrl} WHERE account_id=#{accountId};")
+    void update(User user);
 }

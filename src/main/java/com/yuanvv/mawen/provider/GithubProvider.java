@@ -29,7 +29,7 @@ public class GithubProvider {
             String token = s.split("&")[0].split("=")[1];
             return token;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caused by:" + e.getMessage());
         }
         return null;
     }
@@ -45,9 +45,12 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
             String s = response.body().string();
             GithubUserDTO userDTO = JSON.parseObject(s, GithubUserDTO.class);
+            if (userDTO.getId() == null) {
+                throw new Exception("Github user is illegal.");
+            }
             return userDTO;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Caused by:" + e.getMessage());
         }
         return null;
     }

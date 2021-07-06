@@ -66,4 +66,15 @@ public class QuestionService {
         q.setUser(userMapper.findById(q.getCreator()));
         return q;
     }
+
+    public void createOrUpdate(Question question) {
+        Integer id = question.getId();
+        if (id == null) {
+            // 新建
+            questionMapper.create(question);
+        } else {
+            // 更新
+            questionMapper.update(question);
+        }
+    }
 }

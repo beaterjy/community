@@ -1,10 +1,7 @@
 package com.yuanvv.mawen.mapper;
 
 import com.yuanvv.mawen.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -29,4 +26,7 @@ public interface QuestionMapper {
 
     @Select("SELECT * FROM question WHERE id = #{id} LIMIT 1;")
     Question getQuestionById(@Param("id") Integer id);
+
+    @Update("UPDATE question SET title=#{title}, description=#{description}, tag=#{tag}, gmt_modified=#{gmtModified} WHERE id=#{id};")
+    void update(Question question);
 }
