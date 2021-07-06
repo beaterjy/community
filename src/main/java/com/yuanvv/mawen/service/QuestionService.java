@@ -2,6 +2,8 @@ package com.yuanvv.mawen.service;
 
 import com.yuanvv.mawen.dto.PaginationDTO;
 import com.yuanvv.mawen.dto.QuestionDTO;
+import com.yuanvv.mawen.exception.CustomizeErrorCode;
+import com.yuanvv.mawen.exception.CustomizeException;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Question;
@@ -61,6 +63,9 @@ public class QuestionService {
 
     public QuestionDTO getQuestionById(Integer id) {
         Question question = questionMapper.getQuestionById(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO q = new QuestionDTO();
         BeanUtils.copyProperties(question, q);
         q.setUser(userMapper.findById(q.getCreator()));
