@@ -82,4 +82,13 @@ public class QuestionService {
             questionMapper.update(question);
         }
     }
+
+    public void incView(QuestionDTO question) {
+        Integer id = question.getId();
+        if (id != null) {
+            questionMapper.incViewCountById(id, 1);
+        } else {
+            throw new CustomizeException(CustomizeErrorCode.NULL_VAL);
+        }
+    }
 }
