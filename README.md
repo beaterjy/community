@@ -16,6 +16,8 @@
 ## 工具
 [Visual Paradigm](https://www.visual-paradigm.com)
 
+[Tabbed Postman](https://chrome.google.com/webstore/detail/tabbed-postman-rest-clien/coohjcphdfgbiolnekdpbcijmhambjff/related)
+
 ## 关键配置
 
 mybatis 驼峰识别配置
