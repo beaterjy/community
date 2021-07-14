@@ -13,6 +13,8 @@
 
 [lombok](https://projectlombok.org/features/all)
 
+[JQuery](https://api.jquery.com/)
+
 ## 工具
 [Visual Paradigm](https://www.visual-paradigm.com)
 

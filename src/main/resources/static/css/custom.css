@@ -24,9 +24,29 @@ body {
 .w40 { width:40px;}
 .h40 { height:40px;}
 
+.top10 {  margin-top:10px;}
 .top20 {  margin-top:20px;}
 .left50 {  margin-left:50px;}
+.bottom10 {  margin-bottom:10px;}
 
 .font12 {  font-size: 12px;}
 .font13 {  font-size: 13px;}
 .color999 { color: #999;}
+
+.border-bottom {
+    border-bottom: 1px solid #f5f5f5;}
+
+.operate-line {
+    line-height: 28px;
+    font-size:12px;
+    color: #999;
+}
+.operate {
+    display: inline-block;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    padding:0 10px;
+    color: #999;
+}
+.operate:hover {  background-color: #499ef3;  color: #fff;  text-decoration: none; cursor: pointer;}
+.comment-datetime {  display: inline-block;  float: right;}

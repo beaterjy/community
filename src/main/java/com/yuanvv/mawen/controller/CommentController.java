@@ -1,10 +1,9 @@
 package com.yuanvv.mawen.controller;
 
-import com.yuanvv.mawen.dto.CommentDTO;
+import com.yuanvv.mawen.dto.CommentCreateDTO;
 import com.yuanvv.mawen.dto.ResultDTO;
 import com.yuanvv.mawen.exception.CustomizeErrorCode;
 import com.yuanvv.mawen.exception.CustomizeException;
-import com.yuanvv.mawen.mapper.CommentMapper;
 import com.yuanvv.mawen.model.Comment;
 import com.yuanvv.mawen.model.User;
 import com.yuanvv.mawen.service.CommentService;
@@ -22,7 +21,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object comment(@RequestBody CommentDTO commentDTO,
+    public Object comment(@RequestBody CommentCreateDTO commentCreateDTO,
                           HttpServletRequest request) {
         // @RequestBody 自动反序列化为 Java 类型对象
         // @ResponseBody 返回 JSON 格式
@@ -33,9 +32,9 @@ public class CommentController {
         }
 
         Comment comment = new Comment();
-        comment.setParentId(commentDTO.getParentId());
-        comment.setType(commentDTO.getType());
-        comment.setContent(commentDTO.getContent());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setType(commentCreateDTO.getType());
+        comment.setContent(commentCreateDTO.getContent());
         comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
         comment.setGmtCreate(System.currentTimeMillis());

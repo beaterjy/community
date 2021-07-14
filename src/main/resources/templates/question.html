@@ -14,6 +14,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
             integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
             crossorigin="anonymous"></script>
+    <script src="/js/community.js"></script>
     <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body>
@@ -24,20 +25,77 @@
 <!-- 主体 START -->
 <div class="container-fluid main">
     <div class="row">
+
+        <!-- 问题 -->
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
-            <h3 th:text="${question.title}"></h3>
+            <div>
+                <h3 th:text="${question.title}"></h3>
+                <hr>
+                <p class="font12 color999">
+                    作者 <span th:text="${question.user.name}"></span> |
+                    发布于 <span th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd')}"></span> |
+                    阅读数 <span th:text="${question.viewCount}"></span>
+                </p>
+                <hr>
+                <p th:text="${question.description}"></p>
+                <hr>
+                <p th:if="${session.user != null && session.user.id == question.creator}">
+                    <a href="#" class="font13 color99" th:href="'/publish/' + ${question.id}"><span
+                            class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑</a>
+                </p>
+            </div>
             <hr>
-            <p class="font12 color999">
-                作者 <span th:text="${question.user.name}"></span> |
-                发布于 <span th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd')}"></span> |
-                阅读数 <span th:text="${question.viewCount}"></span>
-            </p>
+
+            <!-- 评论列表 -->
+            <div>
+                <h4>
+                    <span th:text="${question.commentCount}"></span>
+                    <span>个回复</span>
+                </h4>
+                <hr>
+                <div class="media border-bottom" th:each="comment : ${comments}">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object w40 h40" src="" th:src="${comment.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading"><a href="" th:text="${comment.user.name}"></a></h5>
+                        <p th:text="${comment.content}"></p>
+                        <p class="operate-line">
+                            <a class="operate">
+                                <i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>
+                                <b th:text="${comment.likeCount}"></b>
+                            </a>
+                            <a class="operate">
+                                <i class="glyphicon glyphicon-edit" aria-hidden="true"></i>
+                                <b>0</b>
+                            </a>
+                            <span th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}" class="comment-datetime"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 回复框 -->
             <hr>
-            <p th:text="${question.description}"></p>
-            <hr>
-            <p th:if="${session.user != null && session.user.id == question.creator}">
-                <a href="#" class="font13 color99" th:href="'/publish/' + ${question.id}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑</a>
-            </p>
+            <div class="reply">
+                <div class="media" th:if="${session.user != null}">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object w40 h40" src="" th:src="${session.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading top10"><a href="" th:text="${session.user.name}"></a></h5>
+                    </div>
+                </div>
+                <input type="hidden" id="questionId" th:value="${question.id}">
+                <textarea class="form-control top10 bottom10" rows="6" id="content"></textarea>
+                <div class="text-right bottom10">
+                    <button type="button" class="btn btn-success" onclick="postComment()">回复</button>
+                </div>
+            </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
             <div class="top20">

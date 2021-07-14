@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface CommentMapper {
 
@@ -15,4 +17,7 @@ public interface CommentMapper {
 
     @Select("SELECT * FROM comment WHERE id=#{id} LIMIT 1;")
     Comment getCommentById(@Param("id") Long id);
+
+    @Select("SELECT * FROM comment WHERE type=#{type} AND parent_id=#{parentId};")
+    List<Comment> listByTypeAndParentId(@Param("type") Integer type, @Param("parentId") Long parentId);
 }
