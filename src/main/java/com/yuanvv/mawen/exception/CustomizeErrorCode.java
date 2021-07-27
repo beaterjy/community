@@ -7,7 +7,8 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     USER_NOT_FOUND(2003, "用户未登陆，请先登录再操作吧！"),
     COMMENT_NOT_FOUND(2004, "您找的评论不在了，抱歉。"),
     TYPE_PARAM_WRONG(2005, "请求的类型错误。"),
-    TARGET_PARAM_NOT_FOUND(2006, "请求的问题或者评论错误！");
+    TARGET_PARAM_NOT_FOUND(2006, "请求的问题或者评论错误！"),
+    COMMENT_NULL_VAL(2007, "评论内容为空。");
 
     private Integer code;
     private String message;

@@ -2,6 +2,7 @@ package com.yuanvv.mawen.controller;
 
 import com.yuanvv.mawen.dto.CommentDTO;
 import com.yuanvv.mawen.dto.QuestionDTO;
+import com.yuanvv.mawen.enums.CommentType;
 import com.yuanvv.mawen.service.CommentService;
 import com.yuanvv.mawen.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,13 @@ public class QuestionController {
     private CommentService commentService;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Integer id,
+    public String question(@PathVariable(name = "id") Long id,
                                 Model model) {
-        QuestionDTO question = questionService.getQuestionById(id);
+        QuestionDTO question = questionService.getQuestionById(id.intValue());
         if (question != null) {
             questionService.incView(question);
         }
-        List<CommentDTO> comments = commentService.listByQuestionId(id);
+        List<CommentDTO> comments = commentService.listByTypeAndParentId(CommentType.QUESTION, id);
 
         // 返回问题
         model.addAttribute("question", question);

@@ -6,7 +6,8 @@ body {
     margin: 30px 50px 0 60px;
     background-color: white;
 }
-
+.padding10 {
+    padding:10px;}
 .bottom15 {
     margin-bottom: 15px;
 }
@@ -35,6 +36,8 @@ body {
 
 .border-bottom {
     border-bottom: 1px solid #f5f5f5;}
+.border-radius {
+    border: 1px solid #e1e1e1;  border-radius: 10px;}
 
 .operate-line {
     line-height: 28px;
@@ -49,4 +52,5 @@ body {
     color: #999;
 }
 .operate:hover {  background-color: #499ef3;  color: #fff;  text-decoration: none; cursor: pointer;}
+.active-blue {  background-color: #499ef3;  color: #fff;  text-decoration: none; cursor: pointer;}
 .comment-datetime {  display: inline-block;  float: right;}

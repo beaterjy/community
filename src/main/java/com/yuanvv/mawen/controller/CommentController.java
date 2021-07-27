@@ -1,7 +1,9 @@
 package com.yuanvv.mawen.controller;
 
 import com.yuanvv.mawen.dto.CommentCreateDTO;
+import com.yuanvv.mawen.dto.CommentDTO;
 import com.yuanvv.mawen.dto.ResultDTO;
+import com.yuanvv.mawen.enums.CommentType;
 import com.yuanvv.mawen.exception.CustomizeErrorCode;
 import com.yuanvv.mawen.exception.CustomizeException;
 import com.yuanvv.mawen.model.Comment;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -37,6 +40,7 @@ public class CommentController {
         comment.setContent(commentCreateDTO.getContent());
         comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
+        comment.setCommentCount(0L);
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
 
@@ -45,4 +49,12 @@ public class CommentController {
         // 请求成功，返回 ok 信息
         return ResultDTO.okOf();
     }
+
+    @ResponseBody
+    @GetMapping("/sub_comments/{id}")
+    public ResultDTO<List> subCommentsById(@PathVariable("id") Long id) {
+        List<CommentDTO> commentDTOS = commentService.listByTypeAndParentId(CommentType.COMMENT, id);
+        return ResultDTO.okOf(commentDTOS);
+    }
+
 }

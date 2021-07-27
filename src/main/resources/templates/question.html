@@ -7,15 +7,19 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
           integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
             integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
             crossorigin="anonymous"></script>
-    <script src="/js/community.js"></script>
     <link rel="stylesheet" href="/css/custom.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <script type="text/javascript" src="/js/community.js"></script>
+    <script src="/js/moment.js"></script>
 </head>
 <body>
 <!-- 头部 START -->
@@ -64,23 +68,41 @@
                         <p th:text="${comment.content}"></p>
                         <p class="operate-line">
                             <a class="operate">
-                                <i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>
-                                <b th:text="${comment.likeCount}"></b>
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                <span th:text="${comment.likeCount}"></span>
                             </a>
-                            <a class="operate">
-                                <i class="glyphicon glyphicon-edit" aria-hidden="true"></i>
-                                <b>0</b>
+                            <a class="operate" th:onclick="|collapseSubCommentsById(${comment.id})|"
+                               th:id="'switch-'+${comment.id}" data-switchON="false">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                <span th:text="${comment.commentCount}">0</span>
                             </a>
-                            <span th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}" class="comment-datetime"></span>
+                            <span th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}"
+                                  class="comment-datetime"></span>
                         </p>
+                        <!--这是二级评论 START-->
+                        <div class="collapse  border-radius padding10 bottom10"
+                             th:id="'subCommentsBlock-'+${comment.id}">
+                            <!--此处插入二级评论列表-->
+                            <!--二级评论回复-->
+                            <div class="reply" th:if="${session.user != null}">
+                                <textarea class="form-control top10 bottom10" rows="1"
+                                          th:id="'subCommentContent-'+${comment.id}" placeholder="评论一下..."></textarea>
+                                <div class="text-right">
+                                    <button type="button" class="btn btn-success"
+                                            th:onclick="|postComment(2, ${comment.id})|">评论
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--这是二级评论 END-->
                     </div>
                 </div>
             </div>
 
             <!-- 回复框 -->
             <hr>
-            <div class="reply">
-                <div class="media" th:if="${session.user != null}">
+            <div class="reply" th:if="${session.user != null}">
+                <div class="media">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object w40 h40" src="" th:src="${session.user.avatarUrl}">
@@ -93,7 +115,8 @@
                 <input type="hidden" id="questionId" th:value="${question.id}">
                 <textarea class="form-control top10 bottom10" rows="6" id="content"></textarea>
                 <div class="text-right bottom10">
-                    <button type="button" class="btn btn-success" onclick="postComment()">回复</button>
+                    <button type="button" class="btn btn-success" th:onclick="|postComment(1, ${question.id})|">回复
+                    </button>
                 </div>
             </div>
         </div>

@@ -4,11 +4,13 @@ import com.yuanvv.mawen.dto.CommentDTO;
 import com.yuanvv.mawen.enums.CommentType;
 import com.yuanvv.mawen.exception.CustomizeErrorCode;
 import com.yuanvv.mawen.exception.CustomizeException;
+import com.yuanvv.mawen.exception.ICustomizeErrorCode;
 import com.yuanvv.mawen.mapper.CommentMapper;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Comment;
 import com.yuanvv.mawen.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,18 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
         }
 
+        if (comment.getContent() == null || StringUtils.isEmpty(comment.getContent())) {
+            throw new CustomizeException(CustomizeErrorCode.COMMENT_NULL_VAL);
+        }
+
         if (comment.getType().equals(CommentType.COMMENT.getType())) {
             // 回复评论
             if (commentMapper.getCommentById(comment.getParentId()) == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            // 一级评论的回复数 +1
+            commentMapper.incCommentCountById(comment.getParentId(), 1);
         }
 
         if (comment.getType().equals(CommentType.QUESTION.getType())) {
@@ -63,8 +71,16 @@ public class CommentService {
 
     }
 
-    public List<CommentDTO> listByQuestionId(Integer id) {
-        List<Comment> comments = commentMapper.listByTypeAndParentId(CommentType.QUESTION.getType(), id.longValue());
+    public List<CommentDTO> listByTypeAndParentId(CommentType commentType, Long id) {
+        List<Comment> comments;
+        if (CommentType.QUESTION.equals(commentType)) {
+            comments = commentMapper.listByTypeAndParentId(CommentType.QUESTION.getType(), id);
+        } else if (CommentType.COMMENT.equals(commentType)) {
+            comments = commentMapper.listByTypeAndParentId(CommentType.COMMENT.getType(), id);
+        } else {
+            throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
+        }
+
         if (comments == null || comments.size() == 0) {
             return null;
         }
