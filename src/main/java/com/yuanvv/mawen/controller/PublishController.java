@@ -39,7 +39,7 @@ public class PublishController {
         return "publish";
     }
 
-    @PostMapping("/publish/{id}")
+    @PostMapping(value = {"/publish/{id}", "/publish"})
     public String doPublish(
             @PathVariable(value = "id", required = false) Integer id,
             @RequestParam("title") String title,
