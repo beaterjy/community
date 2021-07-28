@@ -7,6 +7,7 @@ import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Question;
 import com.yuanvv.mawen.model.User;
 import com.yuanvv.mawen.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,8 +71,15 @@ public class PublishController {
             if (title == null || title.equals("")) {
                 model.addAttribute("error", "缺少标题");
                 return "publish";
-            } else if (tag == null || "".equals(tag)) {
+            }
+            if (tag == null || "".equals(tag)) {
                 model.addAttribute("error", "缺少标签");
+                return "publish";
+            }
+            // 过滤出不合法的标签
+            String invalid = TagCache.filterInvalid(tag);
+            if (!StringUtils.isEmpty(invalid)) {
+                model.addAttribute("error", "缺少标签：" + invalid);
                 return "publish";
             }
             Question question = new Question();

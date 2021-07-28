@@ -2,10 +2,12 @@ package com.yuanvv.mawen.cache;
 
 import com.yuanvv.mawen.dto.TagDTO;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class TagCache {
@@ -30,6 +32,14 @@ public class TagCache {
 
         return tags;
     };
+
+    public static String filterInvalid(String content) {
+        List<TagDTO> tags = getTags();
+        List<String> tagList = tags.stream().flatMap(t -> t.getTags().stream()).collect(Collectors.toList());
+        String[] tagSelecteds = content.split(",|，");
+        String invalid = Arrays.stream(tagSelecteds).filter(t -> StringUtils.isBlank(t) || !tagList.contains(t)).collect(Collectors.joining(","));
+        return invalid;
+    }
 }
 
 

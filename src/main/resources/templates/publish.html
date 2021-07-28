@@ -46,16 +46,17 @@
                     <label for="tag">添加标签：</label>
                     <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}"
                            placeholder="输入标签，按逗号隔开" autocomplete="off" onclick="showTagBox()">
-                    <!--标签 box-->
+                    <!--标签 BOX-->
                     <div class="tag-box">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" th:each="tagItem : ${tags}"><a
-                                    th:href="'#'+${tagItem.categoryName}" th:aria-controls="${tagItem.categoryName}" class="font12"
-                                    role="tab" data-toggle="tab" th:text="${tagItem.categoryName}"></a></li>
+                            <li role="presentation" th:each="tagItem, tagItemStat : ${tags}" class="font12"
+                                th:classappend="${tagItemStat.first ? 'active' : ''}">
+                                <a th:href="'#'+${tagItem.categoryName}" th:aria-controls="${tagItem.categoryName}" }
+                                   role="tab" data-toggle="tab" th:text="${tagItem.categoryName}"></a></li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane padding10" th:each="tagItem : ${tags}"
-                                 th:id="${tagItem.categoryName}">
+                                 th:classappend="${tagItemStat.first ? 'active' : ''}" th:id="${tagItem.categoryName}">
                                 <!--标签-->
                                 <span th:each="tagName: ${tagItem.tags}" class="right10 tag" onclick="selectTag(this)"
                                       th:attr="data-name=${tagName}">
@@ -67,6 +68,7 @@
                         <hr>
                     </div>
                 </div>
+                <!--发布按钮-->
                 <div class="text-right bottom15">
                     <span class="btn btn-danger warning" th:if="${error} != null" th:text="${error}">警告信息</span>
                     <button type="submit" class="btn btn-success">发布</button>
