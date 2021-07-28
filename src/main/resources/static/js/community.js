@@ -106,6 +106,24 @@ function collapseSubCommentsById(id) {
 }
 
 
+function showTagBox() {
+    $(".tag-box").show();
+}
 
+/**
+ * 选择标签，填充到标签栏
+ * @param elem
+ */
+function selectTag(elem) {
+    var tag = $(elem).attr("data-name");
+    var input = $("#tag");
+    if (input.val().length === 0) {
+        input.val(tag);
+    } else {
+        if (input.val().indexOf(tag) === -1) {
+            input.val(input.val() + "," + tag);
+        }
+    }
+}
 
 

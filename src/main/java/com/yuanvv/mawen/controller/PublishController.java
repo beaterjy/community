@@ -1,5 +1,7 @@
 package com.yuanvv.mawen.controller;
 
+import com.yuanvv.mawen.cache.TagCache;
+import com.yuanvv.mawen.dto.TagDTO;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Question;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class PublishController {
@@ -31,11 +34,17 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", id);
+        // 获取默认的 tags
+        List<TagDTO> tags = TagCache.getTags();
+        model.addAttribute("tags", tags);
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        // 获取默认的 tags
+        List<TagDTO> tags = TagCache.getTags();
+        model.addAttribute("tags", tags);
         return "publish";
     }
 
@@ -52,6 +61,9 @@ public class PublishController {
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
         model.addAttribute("id", id);
+        // 获取默认的 tags
+        List<TagDTO> tags = TagCache.getTags();
+        model.addAttribute("tags", tags);
 
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {

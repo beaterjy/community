@@ -16,6 +16,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/custom.css">
     <link rel="shortcut icon" href="/favicon.ico">
+    <script type="text/javascript" src="/js/community.js"></script>
 </head>
 <body>
 <!-- 头部 START -->
@@ -33,15 +34,38 @@
             <form action="/publish" method="post" th:action="${id == null}? '/publish' : '/publish/'+${id}">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）:</label>
-                    <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="问题标题...">
+                    <input type="text" class="form-control" id="title" name="title" th:value="${title}"
+                           placeholder="问题标题...">
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                    <textarea class="form-control" id="description" name="description" rows="10" th:text="${description}"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="4"
+                              th:text="${description}"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
-                    <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" placeholder="输入标签，按逗号隔开">
+                    <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}"
+                           placeholder="输入标签，按逗号隔开" autocomplete="off" onclick="showTagBox()">
+                    <!--标签 box-->
+                    <div class="tag-box">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" th:each="tagItem : ${tags}"><a
+                                    th:href="'#'+${tagItem.categoryName}" th:aria-controls="${tagItem.categoryName}" class="font12"
+                                    role="tab" data-toggle="tab" th:text="${tagItem.categoryName}"></a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane padding10" th:each="tagItem : ${tags}"
+                                 th:id="${tagItem.categoryName}">
+                                <!--标签-->
+                                <span th:each="tagName: ${tagItem.tags}" class="right10 tag" onclick="selectTag(this)"
+                                      th:attr="data-name=${tagName}">
+                                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                    <span th:text="${tagName}">tag</span>
+                                </span>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
                 <div class="text-right bottom15">
                     <span class="btn btn-danger warning" th:if="${error} != null" th:text="${error}">警告信息</span>
