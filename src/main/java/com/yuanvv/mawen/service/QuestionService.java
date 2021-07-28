@@ -83,7 +83,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(QuestionDTO question) {
+    public void incViewCount(QuestionDTO question) {
         Integer id = question.getId();
         if (id != null) {
             questionMapper.incViewCountById(id, 1);

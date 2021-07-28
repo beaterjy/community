@@ -8,6 +8,7 @@ body {
 }
 .padding10 {
     padding:10px;}
+.padding0 {  padding:0;}
 .bottom15 {
     margin-bottom: 15px;
 }
@@ -29,6 +30,7 @@ body {
 .top20 {  margin-top:20px;}
 .left50 {  margin-left:50px;}
 .bottom10 {  margin-bottom:10px;}
+.right10 {  margin-right:10px;}
 
 .font12 {  font-size: 12px;}
 .font13 {  font-size: 13px;}
@@ -54,3 +56,22 @@ body {
 .operate:hover {  background-color: #499ef3;  color: #fff;  text-decoration: none; cursor: pointer;}
 .active-blue {  background-color: #499ef3;  color: #fff;  text-decoration: none; cursor: pointer;}
 .comment-datetime {  display: inline-block;  float: right;}
+.related {
+    padding: 3px 0;
+    font-size: 12px;
+    line-height:160%;
+    cursor: pointer;
+    text-decoration: none;
+    list-style: none;
+}
+.tag {
+    display: inline-block;
+    height: 20px;
+    line-height: 16px;
+    padding: 2px 5px;
+    background-color: #99cfff;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px;
+}
+.tag:hover {  background-color: #339dff;  text-decoration: none;  color: #ffffff;  }

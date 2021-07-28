@@ -29,6 +29,11 @@ mybatis 驼峰识别配置
 mybatis.configuration.map-underscore-to-camel-case=true
 ```
 
+数据库迁移
+```
+mvn flyway:migrate
+```
+
 ## 源码来源
 
 [码匠社区](https://github.com/codedrinker/community)

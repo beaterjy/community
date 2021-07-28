@@ -27,14 +27,17 @@ public class QuestionController {
                                 Model model) {
         QuestionDTO question = questionService.getQuestionById(id.intValue());
         if (question != null) {
-            questionService.incView(question);
+            questionService.incViewCount(question);
         }
         List<CommentDTO> comments = commentService.listByTypeAndParentId(CommentType.QUESTION, id);
+        List<QuestionDTO> relatedQuestions = commentService.getRelatedQuestions(question);
 
         // 返回问题
         model.addAttribute("question", question);
         // 返回评论列表
         model.addAttribute("comments", comments);
+        // 返回相关问题
+        model.addAttribute("relatedQuestions", relatedQuestions);
 
         return "question";
     }

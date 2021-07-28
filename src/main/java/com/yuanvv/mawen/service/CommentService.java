@@ -1,6 +1,7 @@
 package com.yuanvv.mawen.service;
 
 import com.yuanvv.mawen.dto.CommentDTO;
+import com.yuanvv.mawen.dto.QuestionDTO;
 import com.yuanvv.mawen.enums.CommentType;
 import com.yuanvv.mawen.exception.CustomizeErrorCode;
 import com.yuanvv.mawen.exception.CustomizeException;
@@ -9,6 +10,7 @@ import com.yuanvv.mawen.mapper.CommentMapper;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Comment;
+import com.yuanvv.mawen.model.Question;
 import com.yuanvv.mawen.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -95,5 +98,25 @@ public class CommentService {
             return commentDTO;
         }).collect(Collectors.toList());
         return commentDTOS;
+    }
+
+    public List<QuestionDTO> getRelatedQuestions(QuestionDTO queryDTO) {
+        if (StringUtils.isEmpty(queryDTO.getTag()) || StringUtils.isBlank(queryDTO.getTag())) {
+            // TODO:如果标签为空，推荐默认的问题
+            return null;
+        }
+        String[] tags = queryDTO.getTag().split(",|，");
+        String regexp = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexp);
+        List<Question> relatedQuestions = questionMapper.getRelatedQuestions(question);
+        List<QuestionDTO> questionDTOS = relatedQuestions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            questionDTO.setUser(queryDTO.getUser());
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }
