@@ -15,7 +15,7 @@ public interface CommentMapper {
     @Select("SELECT * FROM comment WHERE id=#{id} LIMIT 1;")
     Comment getCommentById(@Param("id") Long id);
 
-    @Select("SELECT * FROM comment WHERE type=#{type} AND parent_id=#{parentId};")
+    @Select("SELECT * FROM comment WHERE type=#{type} AND parent_id=#{parentId} ORDER BY gmt_modified DESC;")
     List<Comment> listByTypeAndParentId(@Param("type") Integer type, @Param("parentId") Long parentId);
 
     @Update("UPDATE comment SET comment_count=comment_count+#{val} WHERE id=#{id};")
