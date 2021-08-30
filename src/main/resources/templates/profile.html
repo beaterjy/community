@@ -28,9 +28,11 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
             <h3>
                 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-                <span th:text="${sectionName}">发现</span>
+                <span th:text="${sectionName}"></span>
             </h3>
-            <div class="media" th:each="question : ${pagination.questions}">
+            <hr>
+            <!--我的问题-->
+            <div class="media" th:each="question : ${pagination.data}" th:if="${section} == 'questions'">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object w40 h40" src="" th:src="${question.user.avatarUrl}">
@@ -42,8 +44,8 @@
                     <p th:text="${question.description}"></p>
                     <p class="text-extra"><span th:text="${question.commentCount}"></span> 个评论 •
                         <span
-                            th:text="${question.viewCount}"></span> 次浏览 • <span
-                            th:text="${#dates.format(question.gmtCreate,'yyyy MMMM dd')}">
+                                th:text="${question.viewCount}"></span> 次浏览 • <span
+                                th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}">
                         </span>
                         <span> • </span>
                         <span th:if="${session.user != null && session.user.id == question.creator}">
@@ -53,13 +55,26 @@
                     </p>
                 </div>
             </div>
+            <!--最新回复-->
+            <div th:if="${section} == 'replies'">
+                <div th:each="notification : ${pagination.data}">
+                    <p>
+                        <span><a href="#" th:text="${notification.notifierName}"></a></span>
+                        <span th:text="${notification.notificationType}"></span>
+                        <span><a th:href="'/notification/'+${notification.id}" th:text="${notification.outerTitle}"></a></span>
+                        <span class="label label-danger" th:if="${notification.status == 0}">未读</span>
+                    </p>
+                    <p class="text-extra" th:text="${#dates.format(notification.gmtCreate,'yyyy-MM-dd hh:mm')}"></p>
+                    <hr>
+                </div>
+            </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
             <div class="list-group top20">
                 <a href="/profile/questions" class="list-group-item"
                    th:classappend="${section} == 'questions'? 'active' : ''">我的问题</a>
                 <a href="/profile/replies" class="list-group-item"
-                   th:classappend="${section} == 'replies'? 'active' : ''">我的回答</a>
+                   th:classappend="${section} == 'replies'? 'active' : ''"><span>最新回复</span><span class="badge" th:text="${unreadCount}">0</span></a>
             </div>
         </div>
     </div>

@@ -3,13 +3,16 @@ package com.yuanvv.mawen.service;
 import com.yuanvv.mawen.dto.CommentDTO;
 import com.yuanvv.mawen.dto.QuestionDTO;
 import com.yuanvv.mawen.enums.CommentType;
+import com.yuanvv.mawen.enums.NotificationStatus;
+import com.yuanvv.mawen.enums.NotificationType;
 import com.yuanvv.mawen.exception.CustomizeErrorCode;
 import com.yuanvv.mawen.exception.CustomizeException;
-import com.yuanvv.mawen.exception.ICustomizeErrorCode;
 import com.yuanvv.mawen.mapper.CommentMapper;
+import com.yuanvv.mawen.mapper.NotificationMapper;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Comment;
+import com.yuanvv.mawen.model.Notification;
 import com.yuanvv.mawen.model.Question;
 import com.yuanvv.mawen.model.User;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +37,9 @@ public class CommentService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     @Transactional
     public void insert(Comment comment) {
@@ -54,24 +59,54 @@ public class CommentService {
 
         if (comment.getType().equals(CommentType.COMMENT.getType())) {
             // 回复评论
-            if (commentMapper.getCommentById(comment.getParentId()) == null) {
+            Comment parent = commentMapper.getCommentById(comment.getParentId());
+            if (parent == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
             // 一级评论的回复数 +1
             commentMapper.incCommentCountById(comment.getParentId(), 1);
+
+            // 写入通知
+            notify(comment, NotificationType.REPLY_COMMENT, parent.getCommentator().longValue(), parent.getContent());
+
         }
 
         if (comment.getType().equals(CommentType.QUESTION.getType())) {
             // 回复问题
-            if (questionMapper.getQuestionById(comment.getParentId().intValue()) == null) {
+            Question parent = questionMapper.getQuestionById(comment.getParentId().intValue());
+            if (parent == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             commentMapper.insert(comment);
             // 问题的回复数 +1
             questionMapper.incCommentCountById(comment.getParentId(), 1);
+
+            // 写入通知
+            notify(comment, NotificationType.REPLY_QUESTION, parent.getCreator().longValue(), parent.getTitle());
         }
 
+    }
+
+    /**
+     * 写入通知 DB
+     *
+     * @param comment
+     * @param type
+     * @param receiver
+     */
+    private void notify(Comment comment, NotificationType type, Long receiver, String content) { // TODO: 如果 Question 和 Comment 继承自一个父类，可以用父类代替 type 和 receiver
+        User notifier = userMapper.findById(comment.getCommentator());
+        Notification notification = new Notification();
+        notification.setNotifier(Long.valueOf(comment.getCommentator()));
+        notification.setNotifierName(notifier.getName());
+        notification.setReceiver(receiver);
+        notification.setOuterId(comment.getParentId());
+        notification.setOuterTitle(content);
+        notification.setType(type.getType());
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setStatus(NotificationStatus.UNREAD.getStatus());
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByTypeAndParentId(CommentType commentType, Long id) {

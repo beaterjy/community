@@ -38,7 +38,7 @@ public class QuestionService {
         // 封装成 PaginationDTO
         Integer totalCount = questionMapper.count();
         PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOs);
+        paginationDTO.setData(questionDTOs);
         paginationDTO.setPagination(page, pageSize, totalCount);
         return paginationDTO;
     }
@@ -56,7 +56,7 @@ public class QuestionService {
         // 封装成 PaginationDTO
         Integer totalCount = questionMapper.countById(id);
         PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOs);
+        paginationDTO.setData(questionDTOs);
         paginationDTO.setPagination(page, pageSize, totalCount);
         return paginationDTO;
     }
