@@ -15,13 +15,17 @@
             integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/editormd/css/editormd.css"/>
     <link rel="shortcut icon" href="/favicon.ico">
     <script type="text/javascript" src="/js/community.js"></script>
+    <script src="/editormd/editormd.min.js"></script>
 </head>
 <body>
 <!-- 头部 START -->
 <div th:replace="navigation :: nav"></div>
 <!-- 头部 END -->
+
+<!--<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>-->
 
 
 <!-- 主体 START -->
@@ -37,11 +41,23 @@
                     <input type="text" class="form-control" id="title" name="title" th:value="${title}"
                            placeholder="问题标题...">
                 </div>
-                <div class="form-group">
+                <!--问题详情START-->
+                <div class="form-group" id="description-editor">
                     <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                    <textarea class="form-control" id="description" name="description" rows="4"
+                    <textarea class="form-control" id="description" name="description" rows="4" style="display: none;"
                               th:text="${description}"></textarea>
                 </div>
+                <script type="text/javascript">
+                    $(function () {
+                        var editor = editormd("description-editor", {
+                            height: "500px",
+                            watch: false,
+                            placeholder: "请输入问题详情",
+                            path: "/editormd/lib/"
+                        });
+                    });
+                </script>
+                <!--问题详情END-->
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
                     <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}"
