@@ -49,8 +49,6 @@ public class ProfileController {
                 throw new Exception("Not found section.");
         }
         model.addAttribute("section", section);
-        Long unreadCount = notificationService.unreadCountByReceiverId(user.getId().longValue());
-        model.addAttribute("unreadCount", unreadCount);
 
         return "profile";
     }

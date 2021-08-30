@@ -2,6 +2,7 @@ package com.yuanvv.mawen.interceptor;
 
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.User;
+import com.yuanvv.mawen.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -26,6 +30,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     User user = userMapper.findByToken(cookie.getValue());
                     if (user != null) {
                         request.getSession().setAttribute("user", user);
+                        Long unreadCount = notificationService.unreadCountByReceiverId(user.getId().longValue());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     }
                 }
             }
