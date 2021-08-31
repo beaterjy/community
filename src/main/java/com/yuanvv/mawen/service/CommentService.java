@@ -67,8 +67,10 @@ public class CommentService {
             // 一级评论的回复数 +1
             commentMapper.incCommentCountById(comment.getParentId(), 1);
 
-            // 写入通知
-            notify(comment, NotificationType.REPLY_COMMENT, parent.getCommentator().longValue(), parent.getContent());
+            // 写入通知（评论别人才通知）
+            if (!comment.getCommentator().equals(parent.getCommentator())) {
+                notify(comment, NotificationType.REPLY_COMMENT, parent.getCommentator().longValue(), parent.getContent());
+            }
 
         }
 
@@ -83,7 +85,9 @@ public class CommentService {
             questionMapper.incCommentCountById(comment.getParentId(), 1);
 
             // 写入通知
-            notify(comment, NotificationType.REPLY_QUESTION, parent.getCreator().longValue(), parent.getTitle());
+            if (!comment.getCommentator().equals(parent.getCreator())) {
+                notify(comment, NotificationType.REPLY_QUESTION, parent.getCreator().longValue(), parent.getTitle());
+            }
         }
 
     }

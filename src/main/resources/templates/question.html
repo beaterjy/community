@@ -125,15 +125,15 @@
 
             <!-- 回复框 -->
             <hr>
-            <div class="reply" th:if="${session.user != null}">
+            <div class="reply">
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object w40 h40" src="" th:src="${session.user.avatarUrl}">
+                            <img class="media-object w40 h40" src="" th:src="${session.user != null ? session.user.avatarUrl : '/image/default-avatar.png'}">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h5 class="media-heading top10"><a href="" th:text="${session.user.name}"></a></h5>
+                        <h5 class="media-heading top10"><a href="" th:text="${session.user != null ? session.user.name : '匿名用户'}"></a></h5>
                     </div>
                 </div>
                 <input type="hidden" id="questionId" th:value="${question.id}">
