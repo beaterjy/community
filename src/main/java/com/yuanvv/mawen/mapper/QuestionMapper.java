@@ -15,11 +15,19 @@ public interface QuestionMapper {
     @Select("SELECT * FROM question ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
     List<Question> latestList(@Param("offset") Integer offset, @Param("limit") Integer limit);
 
+    @Select("SELECT * FROM question WHERE creator = #{id} ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
+    List<Question> getListById(@Param("id") Integer id, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    //    忽略大小写，统一用小写比较
+    @Select("SELECT * FROM question WHERE LOWER(title) REGEXP #{search} ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
+    List<Question> latestListBySearch(@Param("search") String search, @Param("offset") Integer offset, @Param("limit") Integer pageSize);
+
     @Select("SELECT COUNT(1) FROM question;")
     Integer count();
 
-    @Select("SELECT * FROM question WHERE creator = #{id} ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
-    List<Question> getListById(@Param("id") Integer id, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    //    忽略大小写，统一用小写比较
+    @Select("SELECT COUNT(1) FROM question WHERE LOWER(title) REGEXP #{search};")
+    Integer countBySearch(@Param("search") String search);
 
     @Select("SELECT COUNT(1) FROM question WHERE creator = #{id};")
     Integer countById(@Param("id") Integer id);
@@ -38,4 +46,5 @@ public interface QuestionMapper {
 
     @Select("SELECT * FROM question WHERE tag REGEXP #{tag} AND id != #{id} ORDER BY gmt_modified DESC LIMIT 10;")
     List<Question> getRelatedQuestions(Question question);
+
 }

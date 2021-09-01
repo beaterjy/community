@@ -24,28 +24,33 @@ public class QuestionService {
     private UserMapper userMapper;
 
     public PaginationDTO getPage(Integer page, Integer pageSize) {
-
-        List<QuestionDTO> questionDTOs = new ArrayList<>();
         List<Question> questions = questionMapper.latestList((page - 1) * pageSize, pageSize);
-        for (Question question : questions) {
-            QuestionDTO q = new QuestionDTO();
-            BeanUtils.copyProperties(question, q);
-            q.setUser(userMapper.findById(q.getCreator()));
-
-            questionDTOs.add(q);
-        }
-
-        // 封装成 PaginationDTO
         Integer totalCount = questionMapper.count();
-        PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setData(questionDTOs);
-        paginationDTO.setPagination(page, pageSize, totalCount);
-        return paginationDTO;
+        return paging(questions, page, pageSize, totalCount);
+    }
+
+    public PaginationDTO getPageBySearch(String search, Integer page, Integer pageSize) {
+        List<Question> questions = questionMapper.latestListBySearch(search, (page - 1) * pageSize, pageSize);
+        Integer totalCount = questionMapper.countBySearch(search);
+        return paging(questions, page, pageSize, totalCount);
     }
 
     public PaginationDTO getPageById(Integer id, Integer page, Integer pageSize) {
-        List<QuestionDTO> questionDTOs = new ArrayList<>();
         List<Question> questions = questionMapper.getListById(id, (page - 1) * pageSize, pageSize);
+        Integer totalCount = questionMapper.countById(id);
+        return paging(questions, page, pageSize, totalCount);
+    }
+
+    /***
+     * 将问题封装成 PaginationDTO
+     * @param questions
+     * @param page
+     * @param pageSize
+     * @param totalCount
+     * @return
+     */
+    public PaginationDTO paging(List<Question> questions, Integer page, Integer pageSize, Integer totalCount) {
+        List<QuestionDTO> questionDTOs = new ArrayList<>();
         for (Question question : questions) {
             QuestionDTO q = new QuestionDTO();
             BeanUtils.copyProperties(question, q);
@@ -54,7 +59,6 @@ public class QuestionService {
         }
 
         // 封装成 PaginationDTO
-        Integer totalCount = questionMapper.countById(id);
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setData(questionDTOs);
         paginationDTO.setPagination(page, pageSize, totalCount);
@@ -91,4 +95,5 @@ public class QuestionService {
             throw new CustomizeException(CustomizeErrorCode.NULL_VAL);
         }
     }
+
 }
