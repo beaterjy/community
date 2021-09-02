@@ -3,6 +3,7 @@ package com.yuanvv.mawen.provider;
 import com.alibaba.fastjson.JSON;
 import com.yuanvv.mawen.dto.CodeDTO;
 import com.yuanvv.mawen.dto.GithubUserDTO;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
+@Slf4j
 public class GithubProvider {
     public String getAccessToken(CodeDTO codeDTO) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -29,7 +31,7 @@ public class GithubProvider {
             String token = s.split("&")[0].split("=")[1];
             return token;
         } catch (Exception e) {
-            System.out.println("Caused by:" + e.getMessage());
+            log.error(e.getMessage());
         }
         return null;
     }
@@ -50,7 +52,7 @@ public class GithubProvider {
             }
             return userDTO;
         } catch (Exception e) {
-            System.out.println("Caused by:" + e.getMessage());
+            log.error(e.getMessage());
         }
         return null;
     }
