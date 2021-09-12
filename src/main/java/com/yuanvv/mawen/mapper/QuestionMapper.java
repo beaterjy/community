@@ -20,7 +20,15 @@ public interface QuestionMapper {
 
     //    忽略大小写，统一用小写比较
     @Select("SELECT * FROM question WHERE LOWER(title) REGEXP #{search} ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
-    List<Question> latestListBySearch(@Param("search") String search, @Param("offset") Integer offset, @Param("limit") Integer pageSize);
+    List<Question> latestListBySearch(@Param("search") String search, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    //    忽略大小写，统一用小写比较
+    @Select("SELECT * FROM question WHERE LOWER(tag) REGEXP #{tag} ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
+    List<Question> latestListByTag(@Param("tag") String tag, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    //    忽略大小写，统一用小写比较
+    @Select("SELECT * FROM question WHERE LOWER(title) REGEXP #{search} AND LOWER(tag) REGEXP #{tag} ORDER BY gmt_modified DESC LIMIT #{limit} OFFSET #{offset};")
+    List<Question> latestListBySearchAndTag(@Param("search") String search, @Param("tag") String tag, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     @Select("SELECT COUNT(1) FROM question;")
     Integer count();
@@ -28,6 +36,14 @@ public interface QuestionMapper {
     //    忽略大小写，统一用小写比较
     @Select("SELECT COUNT(1) FROM question WHERE LOWER(title) REGEXP #{search};")
     Integer countBySearch(@Param("search") String search);
+
+    //    忽略大小写，统一用小写比较
+    @Select("SELECT COUNT(1) FROM question WHERE LOWER(tag) REGEXP #{tag};")
+    Integer countByTag(@Param("tag") String tag);
+
+    //    忽略大小写，统一用小写比较
+    @Select("SELECT COUNT(1) FROM question WHERE LOWER(title) REGEXP #{search} AND LOWER(tag) REGEXP #{tag};")
+    Integer countBySearchAndTag(@Param("search") String search, @Param("tag") String tag);
 
     @Select("SELECT COUNT(1) FROM question WHERE creator = #{id};")
     Integer countById(@Param("id") Integer id);

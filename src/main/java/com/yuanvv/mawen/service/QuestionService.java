@@ -7,12 +7,15 @@ import com.yuanvv.mawen.exception.CustomizeException;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.Question;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -23,15 +26,35 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO getPage(Integer page, Integer pageSize) {
-        List<Question> questions = questionMapper.latestList((page - 1) * pageSize, pageSize);
-        Integer totalCount = questionMapper.count();
-        return paging(questions, page, pageSize, totalCount);
-    }
+    public PaginationDTO getPageBySearchAndTag(String search, String tag, Integer page, Integer pageSize) {
+        // 处理 tag
+        if (tag != null && StringUtils.isNotBlank(tag)) {
+            tag = tag.toLowerCase();
+        }
 
-    public PaginationDTO getPageBySearch(String search, Integer page, Integer pageSize) {
-        List<Question> questions = questionMapper.latestListBySearch(search, (page - 1) * pageSize, pageSize);
-        Integer totalCount = questionMapper.countBySearch(search);
+        // 处理 search
+        if (search != null && StringUtils.isNotBlank(search)) {
+            // 更改 search 格式
+            String lowerCase = search.toLowerCase();
+            String[] searchList = lowerCase.split(" ");
+            search = Arrays.stream(searchList).collect(Collectors.joining("|"));
+        }
+
+        List<Question> questions;
+        Integer totalCount = 0;
+        if (search != null) {
+            questions = tag != null ?
+                    questionMapper.latestListBySearchAndTag(search, tag, (page - 1) * pageSize, pageSize) :
+                    questionMapper.latestListBySearch(search, (page - 1) * pageSize, pageSize);
+            totalCount = tag != null ?
+                    questionMapper.countBySearchAndTag(search, tag) :
+                    questionMapper.countBySearch(search);
+        } else {
+            questions = tag != null ? questionMapper.latestListByTag(tag, (page - 1) * pageSize, pageSize)
+                    : questionMapper.latestList((page - 1) * pageSize, pageSize);
+            totalCount = tag != null ? questionMapper.countByTag(tag) : questionMapper.count();
+        }
+
         return paging(questions, page, pageSize, totalCount);
     }
 

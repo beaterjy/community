@@ -2,14 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>码问社区</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+          integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/custom.css">
     <link rel="shortcut icon" href="/favicon.ico">
 </head>
@@ -30,14 +34,26 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading"><a href="" th:text="${question.title}" th:href="'/question/'+${question.id}">我的标题</a></h4>
+                    <h4 class="media-heading"><a href="" th:text="${question.title}"
+                                                 th:href="'/question/'+${question.id}">我的标题</a></h4>
                     <p th:text="${question.description}"></p>
-                    <p class="text-extra"> <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></span></p>
+                    <p class="text-extra"><span th:text="${question.commentCount}"></span> 个评论 • <span
+                            th:text="${question.viewCount}"></span> 次浏览 • <span
+                            th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></span></p>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
             <h3>热门话题</h3>
+            <ul class="padding0">
+                <li th:each="hotTag : ${hotTags}" class="related">
+                    <a href="#" class="tag"
+                       th:href="@{/(tag=${hotTag.name})}"
+                       th:text="${hotTag.name}"></a>
+                    <p class="font12 color999"><span th:text="${hotTag.questionCount}"></span><span>个问题，</span>
+                        <span th:text="${hotTag.commentCount}"></span><span>个评论</span></p>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -45,25 +61,40 @@
 
 <!-- 分页 START -->
 <nav aria-label="Page navigation" class="text-center">
-    <ul class="pagination" >
+    <ul class="pagination">
         <li th:if="${pagination.showStart}">
-            <a href="/" aria-label="Previous" th:href="${search == null} ? @{/(page=${pagination.start})} : @{/(search=${search}, page=${pagination.start})}">
+            <a href="/" aria-label="Previous"
+               th:href="${search == null} ?
+               (${tag==null} ? @{/(page=${pagination.start})} : @{/(tag=${tag}, page=${pagination.start})}) :
+               (${tag==null} ? @{/(search=${search}, page=${pagination.start})} : @{/(search=${search}, tag=${tag}, page=${pagination.start})})">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         <li th:if="${pagination.showPre}">
-            <a href="/" aria-label="Previous" th:href="${search == null} ? @{/(page=${pagination.currPage-1})} : @{/(search=${search}, page=${pagination.currPage-1})}">
+            <a href="/" aria-label="Previous"
+               th:href="${search == null} ?
+               (${tag==null} ? @{/(page=${pagination.currPage-1})} : @{/(tag=${tag}, page=${pagination.currPage-1})}) :
+               (${tag==null} ? @{/(search=${search}, page=${pagination.currPage-1})} : @{/(search=${search}, tag=${tag}, page=${pagination.currPage-1})})">
                 <span aria-hidden="true">&lsaquo;</span>
             </a>
         <li th:each="page : ${pagination.pages}" th:classappend="${page == pagination.currPage}?'active'">
-            <a href="/" th:href="${search == null} ? @{/(page=${page})} : @{/(search=${search}, page=${page})}" th:text="${page}">1</a>
+            <a href="/" th:href="${search == null} ?
+            (${tag==null} ? @{/(page=${page})} : @{/(tag=${tag}, page=${page})}) :
+            (${tag==null} ? @{/(search=${search}, page=${page})} : @{/(search=${search}, tag=${tag}, page=${page})})"
+               th:text="${page}">1</a>
         </li>
         <li th:if="${pagination.showNext}">
-            <a href="/" aria-label="Next" th:href="${search == null} ? @{/(page=${pagination.currPage+1})} :@{/(search=${search}, page=${pagination.currPage+1})}">
+            <a href="/" aria-label="Next"
+               th:href="${search == null} ?
+               (${tag==null} ? @{/(page=${pagination.currPage+1})} : @{/(tag=${tag}, page=${pagination.currPage+1})}) :
+               (${tag==null} ? @{/(search=${search}, page=${pagination.currPage+1})} : @{/(search=${search}, tag=${tag}, page=${pagination.currPage+1})})">
                 <span aria-hidden="true">&rsaquo;</span>
             </a>
         <li th:if="${pagination.showEnd}">
-            <a href="/" aria-label="Next" th:href="${search == null} ? @{/(page=${pagination.end})} : @{/(search=${search}, page=${pagination.end})}">
+            <a href="/" aria-label="Next"
+               th:href="${search == null} ?
+               (${tag==null} ? @{/(page=${pagination.end})} : @{/(tag=${tag}, page=${pagination.end})}) :
+               (${tag==null} ? @{/(search=${search}, page=${pagination.end}} :  @{/(search=${search}, tag=${tag}, page=${pagination.end})})">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>

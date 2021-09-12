@@ -1,8 +1,8 @@
 package com.yuanvv.mawen.controller;
 
+import com.yuanvv.mawen.cache.HotTagCache;
 import com.yuanvv.mawen.mapper.QuestionMapper;
 import com.yuanvv.mawen.mapper.UserMapper;
-import com.yuanvv.mawen.model.User;
 import com.yuanvv.mawen.service.QuestionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * @author yuanvv
@@ -23,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Controller
 public class IndexController {
+
+    @Autowired
+    private HotTagCache hotTagCache;
 
     @Autowired
     private UserMapper userMapper;
@@ -36,6 +36,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(
             @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "tag", required = false) String tag,
             @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(name = "pageSize", required = false, defaultValue = "4") Integer pageSize,
             HttpServletRequest request,
@@ -43,23 +44,28 @@ public class IndexController {
         // 修正 pageSize
         pageSize = pageSize >= 1 ? pageSize : 1;
         Integer totalCount = questionMapper.count();
-        Integer totalpage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
+        Integer totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
         // 修正 page
         page = page >= 1 ? page : 1;
-        page = page <= totalpage ? page : totalpage;
+        page = page <= totalPage ? page : totalPage;
+
+        System.out.println(search + "||" + tag);
+
+        model.addAttribute("pagination", questionService.getPageBySearchAndTag(search, tag, page, pageSize));
 
         // 如果有 search ，应该缓存到页面上
         if (search != null && StringUtils.isNotBlank(search)) {
-            // 更改 search 格式
-            String lowerCase = search.toLowerCase();
-            String[] searchList = lowerCase.split(" ");
-            String regexp = Arrays.stream(searchList).collect(Collectors.joining("|"));
-
-            model.addAttribute("pagination", questionService.getPageBySearch(regexp, page, pageSize));
             model.addAttribute("search", search);
-        }else {
-            model.addAttribute("pagination", questionService.getPage(page, pageSize));
         }
+
+        // 如果有 tag，应该缓存到页面上
+        if (tag != null && StringUtils.isNotBlank(tag)) {
+            model.addAttribute("tag", tag);
+        }
+
+        // 页面缓存 hotTags
+        model.addAttribute("hotTags", hotTagCache.getHotTags().subList(0, 5));
+
 
         return "index";
     }
