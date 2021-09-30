@@ -46,6 +46,13 @@
                     阅读数 <span th:text="${question.viewCount}"></span>
                 </p>
                 <hr>
+
+                <!--广告footer-->
+                <div th:each="ad : ${session.adFOOTER}">
+                    <a th:href="${ad.url}" th:text="${ad.title}" th:classappend="adtext" target="_blank"></a>
+                    <img src="/image/hot.png" alt="">
+                </div>
+
                 <!--问题描述-->
                 <div id="description-markdown-view">
                     <textarea style="display:none;" th:text="${question.description}"></textarea>
@@ -129,11 +136,14 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object w40 h40" src="" th:src="${session.user != null ? session.user.avatarUrl : '/image/default-avatar.png'}">
+                            <img class="media-object w40 h40" src=""
+                                 th:src="${session.user != null ? session.user.avatarUrl : '/image/default-avatar.png'}">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h5 class="media-heading top10"><a href="" th:text="${session.user != null ? session.user.name : '匿名用户'}"></a></h5>
+                        <h5 class="media-heading top10"><a href=""
+                                                           th:text="${session.user != null ? session.user.name : '匿名用户'}"></a>
+                        </h5>
                     </div>
                 </div>
                 <input type="hidden" id="questionId" th:value="${question.id}">
@@ -167,6 +177,12 @@
                         <a href="#" th:href="'/question/' + ${related.id}" th:text="${related.title}"></a>
                     </li>
                 </ul>
+                <hr>
+
+                <!--侧边广告-->
+                <a th:each="ad : ${session.adSIDE}" th:href="${ad.url}" target="_blank" th:title="${ad.title}">
+                    <img th:src="${ad.image}" th:alt="${ad.title}" class="img-thumbnail" th:classappend="w90p">
+                </a>
             </div>
         </div>
     </div>
