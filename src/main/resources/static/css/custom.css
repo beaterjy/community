@@ -25,6 +25,8 @@ body {
 
 .w40 { width:40px;}
 .h40 { height:40px;}
+.w80p {  width:80%;}
+.w90p {  width:90%;}
 
 .top10 {  margin-top:10px;}
 .top20 {  margin-top:20px;}
@@ -87,4 +89,9 @@ body {
     margin-top: 10px;
     text-align: center;
     color: #666;
+}
+
+.adtext {
+    color: #A00;
+    font-weight: bold;
 }

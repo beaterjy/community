@@ -40,6 +40,11 @@ mybatis.configuration.map-underscore-to-camel-case=true
 mvn flyway:migrate
 ```
 
+git 分支命令
+```
+git checkout -b ad
+```
+
 ## 源码来源
 
 [码匠社区](https://github.com/codedrinker/community)

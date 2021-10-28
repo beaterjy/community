@@ -49,8 +49,6 @@ public class IndexController {
         page = page >= 1 ? page : 1;
         page = page <= totalPage ? page : totalPage;
 
-        System.out.println(search + "||" + tag);
-
         model.addAttribute("pagination", questionService.getPageBySearchAndTag(search, tag, page, pageSize));
 
         // 如果有 search ，应该缓存到页面上
