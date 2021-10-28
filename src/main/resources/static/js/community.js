@@ -32,7 +32,7 @@ function postComment(type, id) {
                 // 页面简单刷新一下
                 window.location.reload();
             } else {
-                alert(response.message);
+                $('#loginModal').modal({});
             }
         },
         dataType: "json"

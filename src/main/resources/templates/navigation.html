@@ -26,13 +26,17 @@
             </form>
 
             <!--导航栏广告-->
-            <span th:each="ad : ${session.adNAV}"><a th:href="${ad.url}" th:text="${ad.title}" target="_blank" class="navbar-text"></a></span>
+            <span th:each="ad : ${session.adNAV}"><a th:href="${ad.url}" th:text="${ad.title}" target="_blank"
+                                                     class="navbar-text"></a></span>
 
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user != null}"><a href="/publish">发表</a></li>
-                <li th:if="${session.user != null}"><a href="/profile/replies">通知 <span class="badge" th:text="${session.unreadCount}"></span></a></li>
-                <li th:if="${session.user == null}"><a
-                        href="https://github.com/login/oauth/authorize?client_id=1bfae877fad1af56b49c&scope=user&state=1&redirect_uri=http://localhost:8887/callback">登录</a>
+                <li th:if="${session.user != null}"><a href="/profile/replies">通知 <span class="badge"
+                                                                                        th:text="${session.unreadCount}"></span></a>
+                </li>
+                <li th:if="${session.user == null}">
+                    <!--<a href="https://github.com/login/oauth/authorize?client_id=1bfae877fad1af56b49c&scope=user&state=1&redirect_uri=http://localhost:8887/callback/github" >登录</a>-->
+                    <a href="#" data-toggle="modal" data-target="#loginModal">登录</a>
                 </li>
                 <li class="dropdown" th:if="${session.user != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -49,7 +53,37 @@
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
+
+
+    <!-- 登录 Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">请登录</h4>
+                </div>
+                <div class="modal-body" style="text-align: center">
+                    <a href="https://github.com/login/oauth/authorize?client_id=1bfae877fad1af56b49c&scope=user&state=1&redirect_uri=http://localhost:8887/callback/github">
+                        <img src="/image/github.png" alt="GitHub"></a>
+                    <a href="https://gitee.com/oauth/authorize?client_id=ee0a3dc60a14231421259e5449b95894cf3c858102e13443cfb8a7c28f4e7313&redirect_uri=http://localhost:8887/callback/gitee&response_type=code">
+                        <img src="/image/gitee.png" alt="Gitee"></a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </nav>
+
+<!--&lt;!&ndash; Button trigger modal &ndash;&gt;-->
+<!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
+<!--Launch demo modal-->
+<!--</button>-->
 
 </body>
 

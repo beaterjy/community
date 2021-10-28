@@ -59,8 +59,5 @@ public class HotTagsTasks {
         }
         // 保存到 cache 中
         hotTagCache.updateTags(hotTagDTOMap);
-        hotTagCache.getHotTags().forEach(hotTagDTO -> {
-            log.info(hotTagDTO.getName() + " || " + hotTagDTO.getQuestionCount());
-        });
     }
 }

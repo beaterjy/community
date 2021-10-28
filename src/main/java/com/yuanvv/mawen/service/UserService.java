@@ -1,6 +1,7 @@
 package com.yuanvv.mawen.service;
 
-import com.yuanvv.mawen.dto.GithubUserDTO;
+import com.yuanvv.mawen.dto.LoginUserDTO;
+import com.yuanvv.mawen.enums.LoginUserType;
 import com.yuanvv.mawen.mapper.UserMapper;
 import com.yuanvv.mawen.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,29 +15,30 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public String createOrUpdate(GithubUserDTO githubUserDTO) {
+    public String createOrUpdate(LoginUserDTO loginUserDTO, LoginUserType supportedType) {
 
-        User dbUser = userMapper.findByAccountId(String.valueOf(githubUserDTO.getId()));
+        User dbUser = userMapper.findByAccountIdAndType(String.valueOf(loginUserDTO.getId()), supportedType.getType());
 
         if (dbUser == null) {
             // 创建
             User user = new User();
-            user.setName(githubUserDTO.getName());
-            user.setAccountId(String.valueOf(githubUserDTO.getId()));
+            user.setType(supportedType.getType());
+            user.setName(loginUserDTO.getName());
+            user.setAccountId(String.valueOf(loginUserDTO.getId()));
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            user.setAvatarUrl(githubUserDTO.getAvatar_url());
-            user.setBio(githubUserDTO.getBio());
+            user.setAvatarUrl(loginUserDTO.getAvatar_url());
+            user.setBio(loginUserDTO.getBio());
             userMapper.insert(user);
             return token;
         } else {
             // 更新
-            dbUser.setName(githubUserDTO.getName());
+            dbUser.setName(loginUserDTO.getName());
             dbUser.setGmtModified(System.currentTimeMillis());
-            dbUser.setAvatarUrl(githubUserDTO.getAvatar_url());
-            dbUser.setBio(githubUserDTO.getBio());
+            dbUser.setAvatarUrl(loginUserDTO.getAvatar_url());
+            dbUser.setBio(loginUserDTO.getBio());
             userMapper.update(dbUser);
             return dbUser.getToken();
         }
