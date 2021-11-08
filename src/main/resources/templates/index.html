@@ -54,6 +54,12 @@
                         <span th:text="${hotTag.commentCount}"></span><span>个评论</span></p>
                 </li>
             </ul>
+            <hr>
+
+            <!--侧边广告-->
+            <a th:each="ad : ${session.adSIDE}" th:href="${ad.url}" target="_blank" th:title="${ad.title}">
+                <img th:src="${ad.image}" th:alt="${ad.title}" class="img-thumbnail" th:classappend="w90p">
+            </a>
         </div>
     </div>
 </div>
