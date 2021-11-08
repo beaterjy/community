@@ -66,9 +66,11 @@
                     <h4 class="modal-title" id="myModalLabel">请登录</h4>
                 </div>
                 <div class="modal-body" style="text-align: center">
-                    <a href="https://github.com/login/oauth/authorize?client_id=1bfae877fad1af56b49c&scope=user&state=1&redirect_uri=http://localhost:8887/callback/github">
+                    <!--<a href="https://github.com/login/oauth/authorize?client_id=1bfae877fad1af56b49c&scope=user&state=1&redirect_uri=http://localhost:8887/callback/github">-->
+                    <a th:href="${session.githubCallbackUrl}">
                         <img src="/image/github.png" alt="GitHub"></a>
-                    <a href="https://gitee.com/oauth/authorize?client_id=ee0a3dc60a14231421259e5449b95894cf3c858102e13443cfb8a7c28f4e7313&redirect_uri=http://localhost:8887/callback/gitee&response_type=code">
+                    <!--<a href="https://gitee.com/oauth/authorize?client_id=ee0a3dc60a14231421259e5449b95894cf3c858102e13443cfb8a7c28f4e7313&redirect_uri=http://localhost:8887/callback/gitee&response_type=code">-->
+                    <a th:href="${session.giteeCallbackUrl}">
                         <img src="/image/gitee.png" alt="Gitee"></a>
                 </div>
                 <div class="modal-footer">

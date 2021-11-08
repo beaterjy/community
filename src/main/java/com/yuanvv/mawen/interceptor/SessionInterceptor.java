@@ -1,5 +1,6 @@
 package com.yuanvv.mawen.interceptor;
 
+import com.yuanvv.mawen.cache.LoginUrlCache;
 import com.yuanvv.mawen.dto.AdDTO;
 import com.yuanvv.mawen.enums.AdPosType;
 import com.yuanvv.mawen.mapper.UserMapper;
@@ -30,13 +31,20 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private AdService adService;
 
+    @Autowired
+    private LoginUrlCache loginUrlCache;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 全站广告
         for (AdPosType adPos : AdPosType.values()) {
             List<AdDTO> ads = adService.list(adPos);
-            request.getSession().setAttribute("ad"+adPos.getName(), ads);
+            request.getSession().setAttribute("ad" + adPos.getName(), ads);
         }
+
+        // 登录的 Callback url
+        request.getSession().setAttribute("githubCallbackUrl", loginUrlCache.getGithubCallbackUrl());
+        request.getSession().setAttribute("giteeCallbackUrl", loginUrlCache.getGiteeCallbackUrl());
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
