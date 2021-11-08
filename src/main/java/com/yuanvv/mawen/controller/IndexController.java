@@ -45,6 +45,7 @@ public class IndexController {
         pageSize = pageSize >= 1 ? pageSize : 1;
         Integer totalCount = questionMapper.count();
         Integer totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
+        totalPage = totalPage >= 1 ? totalPage : 1;
         // 修正 page
         page = page >= 1 ? page : 1;
         page = page <= totalPage ? page : totalPage;
@@ -64,7 +65,10 @@ public class IndexController {
         }
 
         // 页面缓存 hotTags
-        model.addAttribute("hotTags", hotTagCache.getHotTags().subList(0, 5));
+        if (hotTagCache.getHotTags() != null) {
+            int numOfHotTags = Math.min(hotTagCache.getHotTags().size(), 5);
+            model.addAttribute("hotTags", hotTagCache.getHotTags().subList(0, numOfHotTags));
+        }
 
 
         return "index";

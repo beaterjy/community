@@ -45,6 +45,11 @@
             <version>1.4.200</version>
         </dependency>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.26</version>
+        </dependency>
+        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.0</version>
@@ -93,13 +98,15 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>7.10.0</version>
                 <configuration>
-                    <url>jdbc:h2:D:/Projects/SpringDemo/mawen/h2db</url>
+                    <url>jdbc:mysql://localhost:3306/mawen</url>
+                    <user>mawen_user</user>
+                    <password>mawen</password>
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>1.4.200</version>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.26</version>
                     </dependency>
                 </dependencies>
             </plugin>
