@@ -1,1 +1,1 @@
-ALTER TABLE USER ADD dio VARCHAR(256) NULL;
+alter table user add dio varchar(256) null;

@@ -1,1 +1,1 @@
-ALTER TABLE USER CHANGE COLUMN DIO BIO VARCHAR(256);
+alter table user change column dio bio varchar(256);

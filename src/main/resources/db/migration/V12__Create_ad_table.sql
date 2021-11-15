@@ -1,13 +1,13 @@
-CREATE TABLE ad
+create table ad
 (
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    title VARCHAR(256) NOT NULL,
-    url VARCHAR(512),
-    image VARCHAR(512),
-    gmt_create BIGINT NOT NULL,
-    gmt_modified BIGINT NOT NULL,
-    gmt_start BIGINT NOT NULL,
-    gmt_end BIGINT NOT NULL,
-    status INT DEFAULT 0 NOT NULL,
-    pos VARCHAR(20) NOT NULL
+    id int auto_increment primary key not null,
+    title varchar(256) not null,
+    url varchar(512),
+    image varchar(512),
+    gmt_create bigint not null,
+    gmt_modified bigint not null,
+    gmt_start bigint not null,
+    gmt_end bigint not null,
+    status int default 0 not null,
+    pos varchar(20) not null
 );

@@ -1,1 +1,1 @@
-ALTER TABLE COMMENT CHANGE COLUMN COMMENT_COUNT COMMENT_COUNT BIGINT DEFAULT 0 NOT NULL;
+alter table comment change column comment_count comment_count bigint default 0 not null;

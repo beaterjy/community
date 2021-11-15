@@ -1,1 +1,1 @@
-ALTER TABLE USER ADD type INT DEFAULT 0 NULL;
+alter table user add type int default 0 null;

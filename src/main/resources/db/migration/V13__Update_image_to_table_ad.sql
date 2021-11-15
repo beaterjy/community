@@ -1,1 +1,1 @@
-ALTER TABLE AD CHANGE COLUMN IMAGE IMAGE VARCHAR(1024);
+alter table ad change column image image varchar(1024);
